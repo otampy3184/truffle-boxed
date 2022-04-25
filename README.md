@@ -101,6 +101,11 @@ $ truffle compile
 $ truffle compile --all
 ```
 
+マイグレート時、もう一度最初からマイグレーションを行いたいときは--resetオプションをつける
+```
+$ truffle migrate --reset
+```
+
 truffle initを使えば基本のプロジェクトが作成される
 ```
 $ truffle init
