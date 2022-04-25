@@ -73,3 +73,35 @@ $ npm run build
 ```
 > test 
 ```
+
+# truffleのコマンド
+マイグレーションファイルを追加したい場合は下記実行することでマイグレーションファイルの雛形を勝手に作ってくれる（ファイル名の先頭は作成時点のタイムスタンプ）
+```
+$ truffle create migration <anyname>
+```
+
+contractを追加したい場合は下記実行することで自動でcontractファイルを作ってくれる
+```
+$ truffle create contract <anyname>
+```
+
+truffle consoleの起動
+```
+$ truffle console
+```
+
+consoleに入らなくても普通にCLIからTruffleコマンドを動かすことも可能
+```
+$ truffle migrate
+$ truffle compile
+```
+
+コンパイル時に、全ファイル一括でコンパイルする際は--allオプションが使える
+```
+$ truffle compile --all
+```
+
+truffle initを使えば基本のプロジェクトが作成される
+```
+$ truffle init
+```
