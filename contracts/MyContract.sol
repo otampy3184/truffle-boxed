@@ -22,4 +22,8 @@ contract MyToken is ERC20{
         return _totalSupply;
     }
 
+    function get() public view returns (uint256) {
+        return _totalSupply;
+    }
+
 }
