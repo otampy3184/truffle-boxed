@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+//import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import MyToken from "./contracts/MyToken.json";
 import getWeb3 from "./getWeb3";
 
 import "./App.css";
@@ -17,9 +18,13 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = MyToken.networks[networkId];
+      // const instance = new web3.eth.Contract(
+      //   SimpleStorageContract.abi,
+      //   deployedNetwork && deployedNetwork.address,
+      // );
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        MyToken.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
@@ -39,10 +44,14 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+    //await contract.methods.set(5).send({ from: accounts[0] });
+    //　自作のコントラクを呼び出して１００トークンミントする
+    await contract.methods.mintToken("0x10f90666942D8FF04ad012728Db2434C0CE1d9a8", 100).send({ from: accounts[0]});
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    //const response = await contract.methods.get().call();
+    //ミントされたトークンを確認する
+    const response = await contract.methods.totalSupply.call();
 
     // Update state with the result.
     this.setState({ storageValue: response });

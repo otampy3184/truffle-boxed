@@ -18,4 +18,8 @@ contract MyToken is ERC20{
         _mint(recipient, initialSupply);
     }
 
+    function totalSupply() public view override returns (uint256) {
+        return _totalSupply;
+    }
+
 }
