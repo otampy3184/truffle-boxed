@@ -53,3 +53,23 @@ setState()によってresponseに入っているvalue値が格納され、HTML�
 ```html
         <div>The stored value is: {this.state.storageValue}</div>
 ```
+
+初回起動以降は以下のコマンドでtruffleコンソールとフロントエンドを起動できる
+```
+$ truffle console
+$ cd client
+$ yarn start
+```
+
+ソースコード更新後は以下を行なって更新を適用する
+```
+$ truffle compile
+$ truffle migrate
+$ cd client
+$ npm run build
+```
+
+ネットワーク立ち上げ後、truffleのコンソール内で以下を叩けばtestスクリプトを実行できる
+```
+> test 
+```
