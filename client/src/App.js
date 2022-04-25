@@ -6,7 +6,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { storageValue: null, web3: null, accounts: null, contract: null };
 
   componentDidMount = async () => {
     try {
@@ -46,15 +46,17 @@ class App extends Component {
     // Stores a given value, 5 by default.
     //await contract.methods.set(5).send({ from: accounts[0] });
     //　自作のコントラクを呼び出して１００トークンミントする
-    await contract.methods.mintToken("0x10f90666942D8FF04ad012728Db2434C0CE1d9a8", 100).send({ from: accounts[0]});
+    await contract.methods.mintToken("0x10f90666942D8FF04ad012728Db2434C0CE1d9a8", 122121).send({ from: accounts[0]});
 
     // Get the value from the contract to prove it worked.
     //const response = await contract.methods.get().call();
     //ミントされたトークンを確認する
-    const response = await contract.methods.totalSupply.call();
+    const response = await contract.methods.get().call();
 
     // Update state with the result.
+    // response内に入っているトークン量をstorageValueに格納する
     this.setState({ storageValue: response });
+    //this.setState({ storageValue: 120121002100 })
   };
 
   render() {
@@ -63,17 +65,11 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
+        <h1>My very first Token!!!!!</h1>
         <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
+          ERC20準拠のトークンをミントして、画面上に表示↓↓↓
         </p>
-        <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <div>total amounts of hehe-token are ... {this.state.storageValue}-sorry</div>
       </div>
     );
   }
