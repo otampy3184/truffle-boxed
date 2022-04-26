@@ -51,7 +51,7 @@ class App extends Component {
     // Get the value from the contract to prove it worked.
     //const response = await contract.methods.get().call();
     //ミントされたトークンを確認する
-    const response = await contract.methods.get().call();
+    const response = await contract.methods.totalSupply().call();
 
     // Update state with the result.
     // response内に入っているトークン量をstorageValueに格納する
