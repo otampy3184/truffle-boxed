@@ -13,9 +13,11 @@ contract MyToken is ERC20, Ownable{
     mapping(address => mapping(address => uint256)) private _allowance;
 
     // トークンの名称
-    string private _name;
+    //string private _name;
+    string _name;
     // トークンの単位名称
-    string private _symbol;
+    //string private _symbol;
+    string _symbol;
 
     // 自前のコンストラクタで名称と単位名称を決定する
     // constructor(string memory name_, string memory symbol_) {
@@ -32,9 +34,18 @@ contract MyToken is ERC20, Ownable{
     ) {}
 
     // 指定した数のトークンを指定のアドレスに対してミントする
-    function mintToken(address recipient, uint256 initialSupply ) public onlyOwner {
-        _totalSupply = initialSupply;
+    // function mintToken(address recipient, uint256 initialSupply ) public onlyOwner {
+    //     _totalSupply = initialSupply;
 
+    //     _mint(recipient, initialSupply);
+    // }
+
+    function pause() public {
+        _pause();
+    }
+
+    function mintToken(address recipient, uint256 initialSupply) public {
+        _totalSupply += initialSupply;
         _mint(recipient, initialSupply);
     }
 
