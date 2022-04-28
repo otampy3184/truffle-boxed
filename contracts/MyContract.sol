@@ -4,9 +4,10 @@ pragma solidity ^0.8.0;
 
 import "./erc20/ERC20.sol";
 import "./access/Ownable.sol";
+import "./security/Pausable.sol";
 
 // ERC20を継承した独自トークンを作成
-contract MyToken is ERC20, Ownable{
+contract MyToken is ERC20, Ownable, Pausable{
     // アカウントと残高を紐づけるデータ構造
     mapping(address => uint256) private _balances;
     // 転送許容量と各アカウントを紐づけるデータ構造
