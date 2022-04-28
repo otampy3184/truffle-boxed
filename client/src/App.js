@@ -46,12 +46,12 @@ class App extends Component {
     // Stores a given value, 5 by default.
     //await contract.methods.set(5).send({ from: accounts[0] });
     //　自作のコントラクを呼び出して１００トークンミントする
-    await contract.methods.mintToken("0x10f90666942D8FF04ad012728Db2434C0CE1d9a8", 122121).send({ from: accounts[0]});
+    await contract.methods.mintToken("0x99A650D1a2C21E77ca2Bdf25d63F68616a912c3d", 10).send({ from: accounts[0]});
 
     // Get the value from the contract to prove it worked.
     //const response = await contract.methods.get().call();
     //ミントされたトークンを確認する
-    const response = await contract.methods.totalSupply().call();
+    const response = await contract.methods.get().call();
 
     // Update state with the result.
     // response内に入っているトークン量をstorageValueに格納する
