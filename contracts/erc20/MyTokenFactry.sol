@@ -31,9 +31,13 @@ contract MyTokenFactory {
      * @param symbol string memory シンボル名
      * @param decimal uint8 小数点
      */
-
     function cretateMyToken(string memory name, string memory symbol, uint8 decimal) public {
-        MyToken myToken = new MyToken(name, symbol, decimal);
+        //MyToken myToken = new MyToken(name, symbol, decimal);
+        MyToken myToken = new MyToken();
+
+        myToken.transferOwnership(msg.sender);
+        _myTokens.push(myToken);
+        emit MyTokenCreated(myToken, msg.sender);
     }
 
     /**
@@ -43,6 +47,12 @@ contract MyTokenFactory {
      * @param offset uint256 取得数
      * @return coll MyTokenコントラクトの配列
      */
+     function myTokens (uint256 limit, uint256 offset) public virtual returns (MyToken[] memory coll) {
+         require(offset <= myTokensCount(), "offset out of bounds");
+
+         uint256 size = myTokensCount() - offset;
+         size = size < Limit ? size : limit;
+     }
 
 
 }
