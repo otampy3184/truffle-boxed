@@ -2,12 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import "./erc20/ERC20.sol";
-import "./access/Ownable.sol";
-import "./security/Pausable.sol";
+import "./ERC20.sol";
+import "../access/Ownable.sol";
+import "../security/Pausable.sol";
+import "./extensions/ERC20Burnable.sol";
 
 // ERC20を継承した独自トークンを作成
-contract MyToken is ERC20, Ownable, Pausable{
+contract MyToken is ERC20, Ownable, Pausable, ERC20Burnalbe{
     // アカウントと残高を紐づけるデータ構造
     mapping(address => uint256) private _balances;
     // 転送許容量と各アカウントを紐づけるデータ構造
@@ -30,9 +31,14 @@ contract MyToken is ERC20, Ownable, Pausable{
     uint256 private _totalSupply;
 
     // 自前でコンストラクタを用意するのでコメントアウト
-    constructor() ERC20(
-        "hehe", "sorry"
-    ) {}
+    // constructor() ERC20(
+    //     "hehe", "sorry"
+    // ) {}
+
+    constructor(string memory name_, string memory symbol_, uint8 _decimal) ERC20 (_name, _symbol, _decimal) {
+        _name = name_;
+        _symbol = symbol_;
+    }
 
     // 指定した数のトークンを指定のアドレスに対してミントする
     // function mintToken(address recipient, uint256 initialSupply ) public onlyOwner {
