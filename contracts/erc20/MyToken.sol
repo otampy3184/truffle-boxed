@@ -35,7 +35,7 @@ contract MyToken is ERC20, Ownable, Pausable, ERC20Burnalbe{
     //     "hehe", "sorry"
     // ) {}
 
-    constructor(string memory name_, string memory symbol_, uint8 _decimal) ERC20 (_name, _symbol, _decimal) {
+    constructor(string memory name_, string memory symbol_, uint8 _decimal){
         _name = name_;
         _symbol = symbol_;
     }
@@ -47,21 +47,77 @@ contract MyToken is ERC20, Ownable, Pausable, ERC20Burnalbe{
     //     _mint(recipient, initialSupply);
     // }
 
+    /**
+     * 停止関数
+     */
     function pause() public {
         _pause();
     }
 
-    function mintToken(address recipient, uint256 initialSupply) public {
-        _totalSupply += initialSupply;
-        _mint(recipient, initialSupply);
+    /**
+     * 停止解除関数（外部用）
+     */
+    function unpause_() public {
+        unpause();
     }
 
-    // 全供給量を取得する
+    /**
+     * 停止解除関数
+     */
+    function unpause() internal override {
+        _unpause();
+    }
+
+    /**
+     * トークンをミントする
+     * @param address
+     * @param uint256
+     */
+    function _mint(address to, uint256 amount) internal override {
+        super._mint(to, amount);
+    }
+     
+    // function mintToken(address recipient, uint256 initialSupply) public {
+    //     _totalSupply += initialSupply;
+    //     _mint(recipient, initialSupply);
+    // }
+
+    /**
+     * トークンをburnする
+     * @param address
+     * @param uint256
+     */
+    function burn (address to, uint256 amount) public {
+        _burn(to, amount);
+    }
+
+    /**
+     * トークンの全流通量を取得する
+     * @return uint256
+     */
     function totalSupply() public view override returns (uint256) {
         return _totalSupply;
     }
 
-    // 
+    /**
+     * Token移転の前処理
+     * @param address
+     * @param address 
+     * @param uin256
+     */
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal whenNotPaused override {
+        super._beforeTokenTransfer(from, to, amount);
+    }
+
+    /**
+     * @param address
+     * @param address
+     * @param uin256
+     */
+    function _afterTokenTransfer(address from, address to, uint256 amount) internal whenNotPaused override {
+        super._afterTokenTransfer(from, to, amount);
+    }
+
     function get() public view returns (uint256) {
         return _totalSupply;
     }
