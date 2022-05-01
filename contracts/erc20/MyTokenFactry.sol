@@ -15,11 +15,6 @@ contract MyTokenFactory {
      */
     event MyTokenCreated (MyToken indexed myToken, address indexed owner);
 
-    /**
-     * インスタンス数を取得するmyTokensCount関数
-     * public view
-     * @return uint256 
-     */
     function myTokensCount() public view returns (uint256) {
         return _myTokens.length;
     }
@@ -29,11 +24,10 @@ contract MyTokenFactory {
      * public
      * @param name string memory Token名
      * @param symbol string memory シンボル名
-     * @param decimal uint8 小数点
      */
-    function cretateMyToken(string memory name, string memory symbol, uint8 decimal) public {
+    function cretateMyToken(string memory name, string memory symbol) public {
         //MyToken myToken = new MyToken(name, symbol, decimal);
-        MyToken myToken = new MyToken();
+        MyToken myToken = new MyToken(name, symbol);
 
         myToken.transferOwnership(msg.sender);
         _myTokens.push(myToken);
@@ -52,12 +46,12 @@ contract MyTokenFactory {
          require(offset <= myTokensCount(), "offset out of bounds");
          // 最大値を上回っている場合はLimitを格納する
          uint256 size = myTokensCount() - offset;
-         size = size < Limit ? size : limit;
+         size = size < limit ? size : limit;
          // sizeはmaxLimitを超えてはならない
          size = size < maxLimit ? size : maxLimit;
          // コントラクト用の配列
          coll = new MyToken[](size);
-         
+
          for (uint256 i = 0; i < size; i++){
              coll[i] = _myTokens[offset + i];
          }
