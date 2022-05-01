@@ -48,10 +48,21 @@ contract MyTokenFactory {
      * @return coll MyTokenコントラクトの配列
      */
      function myTokens (uint256 limit, uint256 offset) public virtual returns (MyToken[] memory coll) {
+         // 事前確認
          require(offset <= myTokensCount(), "offset out of bounds");
-
+         // 最大値を上回っている場合はLimitを格納する
          uint256 size = myTokensCount() - offset;
          size = size < Limit ? size : limit;
+         // sizeはmaxLimitを超えてはならない
+         size = size < maxLimit ? size : maxLimit;
+         // コントラクト用の配列
+         coll = new MyToken[](size);
+         
+         for (uint256 i = 0; i < size; i++){
+             coll[i] = _myTokens[offset + i];
+         }
+
+         return coll;
      }
 
 
