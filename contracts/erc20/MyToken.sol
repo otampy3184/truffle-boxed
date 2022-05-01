@@ -6,9 +6,10 @@ import "./ERC20.sol";
 import "../access/Ownable.sol";
 import "../security/Pausable.sol";
 import "./extensions/ERC20Burnable.sol";
+import "./extensions/draft-ERC20Permit.sol";
 
 // ERC20を継承した独自トークンを作成
-contract MyToken is ERC20, Ownable, Pausable, ERC20Burnalbe{
+contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
     string tokenName;
     string tokenSymbol;
 
