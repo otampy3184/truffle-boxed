@@ -7,13 +7,14 @@ import "../access/Ownable.sol";
 import "../security/Pausable.sol";
 import "./extensions/ERC20Burnable.sol";
 import "./extensions/draft-ERC20Permit.sol";
+import "./extensions/ERC20Votes.sol";
 
 // ERC20を継承した独自トークンを作成
-contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
+contract MyToken is ERC20, Ownable, Pausable, ERC20Burnalbe, ERC20Permit, ERC20Votes {
     string tokenName;
     string tokenSymbol;
 
-    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) ERC20Permit(_name) {
         tokenName = _name;
         tokenSymbol = _symbol;
     }
@@ -21,21 +22,14 @@ contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
     /**
      * 停止関数
      */
-    function pause() public {
+    function pause() public onlyOwner {
         _pause();
-    }
-
-    /**
-     * 停止解除関数（外部用）
-     */
-    function unpause_() public {
-        unpause();
     }
 
     /**
      * 停止解除関数
      */
-    function unpause() internal override {
+    function unpause_() public onlyOwner{
         _unpause();
     }
 
@@ -44,7 +38,7 @@ contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
      * @param to mint先
      * @param amount mint量
      */
-    function mint(address to, uint256 amount) public {
+    function mint(address to, uint256 amount) public onlyOwner{
         _mint(to, amount);
     }
 
@@ -53,7 +47,7 @@ contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
      * @param to burn to 
      * @param amount burn amount
      */
-    function burn (address to, uint256 amount) public {
+    function burn (address to, uint256 amount) public onlyOwner{
         _burn(to, amount);
     }
 
@@ -72,7 +66,7 @@ contract MyToken is ERC20, Ownable, Pausable, Ownable, ERC20Burnalbe {
      * @param to to address 
      * @param amount amount
      */
-    function _afterTokenTransfer(address from, address to, uint256 amount) internal whenNotPaused override {
+    function _afterTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Votes) {
         super._afterTokenTransfer(from, to, amount);
     }
 
