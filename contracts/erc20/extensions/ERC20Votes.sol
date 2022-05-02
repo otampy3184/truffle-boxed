@@ -30,5 +30,37 @@ abstract contract ERC20Votes is IVotes, ERC20Permit {
     function numCheckpoints(address account) public view virtual returns(uint32){
         return SafeCast.toUint32(_checkpoints[account].length);
     }
+
+    function delegates (address account) public view virtual override returns(address ){
+        return _delegates[account];
+    }
+
+    function getVotes(address account) public view virtual override returns(uint256){
+        uint256 pos = _checkpoints[account].length;
+        return pos == 0 ? 0 : _checkpoints[account][pos - 1].votes;
+    }
+
+    function getPastVotes(uint256 blockNumber) public view virtual override returns(uint256) {
+        require(blockNumber < block.number, "ERC20Votes: block not yet mined");
+        return _checkpointsLoop(_totalSupplyCheckpoints, blockNumber);
+    }
+
+    function _checkpointsLoop(Checkpoint[] storage ckpts, uint256 blockNumber) private view returns (uint256) {
+        uint256 high = ckpts.length;
+        uint256 low = 0;
+        while (low < high) {
+            uint256 mid = Math.average(low, high);
+            if (ckpts[mid].fromBlock > blockNumber) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return high == 0 ? 0 : ckpts[high - 1].votes;
+    }
+
+    
+
 }
 
