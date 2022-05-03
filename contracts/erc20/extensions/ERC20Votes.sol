@@ -60,7 +60,70 @@ abstract contract ERC20Votes is IVotes, ERC20Permit {
         return high == 0 ? 0 : ckpts[high - 1].votes;
     }
 
-    
+    function _afterTokenTransfer(
+        address from,
+        address to,
+        uint256 amount 
+    ) internal virtual override {
+        super._afterTokenTransfer(from, to, amount);
+
+        _moveVotingPower(delegates(from), delegates(to), amount);
+    }
+
+    function delegate(address delegatee) public virtual override {
+        _delegate(_msgSender(), delegatee);
+    }
+
+    function _delegate(address delegator, address delegatee) internal virtual {
+        address currentDelegate = delegates(delegator);
+        uint256 delegatorBalance = balanceOf(delegator);
+        _delegates[delegator] = delegatee;
+
+        emit DelegateChanged(delegator, currentDelegate, delegatee);
+
+        
+    }
+
+    function _moveVotingPower(
+        address src,
+        address dst,
+        uint256 amount
+    ) private {
+        if (src != dst && amount > 0) {
+            if (src != address(0)){
+                (uint256 oldWeight, uint256 newWeight) = _writeCheckpoint(_checkpoints[src], _subtract, amount);
+                emit DelegateVotesChanged(src, oldWeight, newWeight);
+            }
+
+            if (dst != address(0)){
+                (uint256 oldWeight, uint256 newWeight) = _writeCheckpoint(_checkpoints[dst], _add, amount);
+                emit DelegateVotesChanged(dst, oldWeight, newWeight);
+            }
+        }
+    }
+
+    function _writeCheckpoint(
+        Checkpoint[] storage ckpts,
+        function (uint256, uint256) view returns (uint256) op,
+        uint256 delta 
+    ) private returns ( uint256 oldWeight, uint256 newWeight) {
+        uint256 pos = ckpts.length;
+        oldWeight = pos == 0 ? 0 : ckpts[pos - 1].votes;
+        newWeight = op(oldWeight, delta);
+        if (pos > 0 && ckpts[pos - 1].fromBlock == block.number) {
+            ckpts[pos - 1].votes = SafeCast.toUint224(newWeight);
+        } else {
+            ckpts.push(Checkpoint({fromBlock: SafeCast.toUint32(block.number), votes: SafeCast.toUint224(newWeight)}));
+        }
+     }
+
+     function _add(uint256 a, uint256 b) private pure returns (uint256) {
+         return a + b;
+     }
+
+     function _subtract(uint256 a, uint256 b)private pure returns(uint256){
+         return a - b;
+     }
 
 }
 
