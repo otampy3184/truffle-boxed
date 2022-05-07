@@ -8,15 +8,15 @@ import "../../node_modules/@openzeppelin/contracts/utils/Strings.sol";
 
 // ERC1155を継承したコントラクトSushiItemを作成
 contract SushiItem is ERC1155 {
-    using Counters for Counters.Couter;
-    Counters.Couter private _tokenCounter;
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenCounter;
 
     // ネタの文字列を数字で表現
-    uint256 public constant TUNE = 0;
+    uint256 public constant TUNA = 0;
     uint256 public constant SALMON = 1;
     uint256 public constant TOROTAKU = 2;
     uint256 public constant TAMAGO = 3;
-    uint256 public constant UIN = 4;
+    uint256 public constant UNI = 4;
 
     // メタデータを作成するURI用の変数を設定
     string baseMetadataURIPrefix;
